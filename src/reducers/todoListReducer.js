@@ -1,25 +1,29 @@
 /* GET LIST OF TODOS */
 
-const todoList = [];
-
-export default (state = todoList, action) => {
+export default (state = [], action) => {
   switch (action.type) {
-    case 'GET_LIST':
-      return todoList;
-
     case 'ADD_TODO':
-      todoList.push(action.payload);
-
-      return todoList;
+      return [...state, action.payload];
 
     case 'DELETE_TODO':
-      console.log(todoList);
-      const todo = todoList.find((todo) => todo.name === action.payload.name);
+      console.log('DELETE_TODO state:', state);
+      const todo = state.find((todo) => {
+        console.log(`Comparing ${todo.name} with ${action.payload.name}`);
+        return todo.name === action.payload.name;
+      });
 
-      const index = todoList.indexOf(todo);
+      console.log(todo);
 
-      if (index) return todoList.slice(index, index + 1);
-      else return todoList;
+      const index = state.indexOf(todo);
+
+      console.log('Index: ', index);
+
+      if (index > 0) {
+        // remove from the state from store
+        state[index] = undefined;
+
+        return state;
+      } else return state;
 
     default:
       return state;

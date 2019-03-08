@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
 
-import { fetchTodos, deleteTodo } from '../actions';
+import { addTodo, deleteTodo } from '../actions';
 import TodoArea from './TodoArea';
 import TodoButton from './shared/TodoButton';
 
@@ -10,8 +11,19 @@ class App extends Component {
     step: 1,
     todoList: [],
     name: '',
-    content: ''
+    content: '',
+    data: []
   };
+
+  async componentDidMount() {
+    const { data } = await axios.post('http://localhost:3003/save_todo', {
+      title: 'Test',
+      content: 'Test content'
+    });
+    this.setState({
+      data
+    });
+  }
 
   handleInpChange = (e) => {
     this.setState({
@@ -23,13 +35,9 @@ class App extends Component {
     e.preventDefault();
 
     // use action creator from redux to update our state in redux store
-    this.props.fetchTodos({
+    this.props.addTodo({
       name: this.state.name,
       content: this.state.content
-    });
-
-    this.setState({
-      todoList: this.props.todoList
     });
   };
 
@@ -65,23 +73,27 @@ class App extends Component {
   };
 
   render() {
-    console.log(this.props.todoList);
+    const { todoList } = this.props;
+    console.log(todoList);
+    console.log('Data:', this.state.data);
 
-    const { todoList, step } = this.state;
+    const { step } = this.state;
     return (
       <div className="main-app pt-5 pl-5 pr-5">
         <h2 className="main-title display-4">Prestine</h2>
         {this.handleMenu(step)}
         <TodoButton
           name={'Delete'}
-          onClickMethod={() => this.props.deleteTodo('Test')}
+          onClickMethod={() => this.props.deleteTodo({ name: 'Test' })}
         />
 
-        {todoList.length > 0
-          ? todoList.map((todo) => (
-              <TodoArea key={todo.name} todo={{ ...todo }} />
-            ))
-          : 'You have no todos!'}
+        {todoList.length > 0 ? (
+          todoList.map((todo) => (
+            <TodoArea key={todo.name} todo={{ ...todo }} />
+          ))
+        ) : (
+          <div className="mt-4">You have no todos!</div>
+        )}
       </div>
     );
   }
@@ -95,5 +107,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-  { fetchTodos: fetchTodos, deleteTodo: deleteTodo }
+  { addTodo: addTodo, deleteTodo: deleteTodo }
 )(App);

@@ -1,6 +1,6 @@
 /* Action Creators */
 
-export const fetchTodos = (todo) => {
+export const addTodo = (todo) => {
   return {
     type: 'ADD_TODO',
     payload: todo
