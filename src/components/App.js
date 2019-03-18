@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import { Switch, Route, Link } from 'react-router-dom';
 
 import { addTodo, deleteTodo } from '../actions';
-import TodoArea from './TodoArea';
+import Todo from './Todo';
 import TodoButton from './shared/TodoButton';
+import Login from './pages/Login';
 
 class App extends Component {
   state = {
@@ -74,30 +76,22 @@ class App extends Component {
 
   render() {
     const { todoList } = this.props;
-    console.log(todoList);
+    console.log('Todo List:', todoList);
     console.log('Data:', this.state.data);
 
     const { step } = this.state;
+
     return (
-      <div className="main-app pt-5 pl-5 pr-5">
-        <h2 className="main-title display-4">Prestine</h2>
+      <>
         {this.handleMenu(step)}
 
-        {todoList.length > 0 ? (
-          todoList.map((todo) => (
-            <>
-              <TodoArea key={todo.name} todo={{ ...todo }} />
-              {/* pass the specific todo to it's own button */}
-              <TodoButton
-                name={'Delete'}
-                onClickMethod={() => this.props.deleteTodo(todo)}
-              />
-            </>
-          ))
-        ) : (
-          <div className="mt-4">You have no todos!</div>
-        )}
-      </div>
+        <Todo
+          step={step}
+          todoList={todoList}
+          deleteTodo={this.props.deleteTodo}
+          handleMenu={this.handleMenu}
+        />
+      </>
     );
   }
 }

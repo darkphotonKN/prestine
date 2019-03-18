@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 
 import reducers from './reducers';
 
-import App from './components/App';
+import Routes from './routes';
 
 // bootstrap
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,7 +14,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 ReactDOM.render(
   <Provider store={createStore(reducers)}>
     <Router>
-      <App />
+      <Routes />
     </Router>
   </Provider>,
 
