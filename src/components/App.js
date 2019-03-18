@@ -82,14 +82,17 @@ class App extends Component {
       <div className="main-app pt-5 pl-5 pr-5">
         <h2 className="main-title display-4">Prestine</h2>
         {this.handleMenu(step)}
-        <TodoButton
-          name={'Delete'}
-          onClickMethod={() => this.props.deleteTodo({ name: 'Test' })}
-        />
 
         {todoList.length > 0 ? (
           todoList.map((todo) => (
-            <TodoArea key={todo.name} todo={{ ...todo }} />
+            <>
+              <TodoArea key={todo.name} todo={{ ...todo }} />
+              {/* pass the specific todo to it's own button */}
+              <TodoButton
+                name={'Delete'}
+                onClickMethod={() => this.props.deleteTodo(todo)}
+              />
+            </>
           ))
         ) : (
           <div className="mt-4">You have no todos!</div>
